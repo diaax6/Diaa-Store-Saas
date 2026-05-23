@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+
+# Production
+build/
+
+# Env files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Uploads
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Temp/scratch files
+_extract_old_code.js
+_fix_imports.js
+_fix_suspense.js
+_recovered_files.json
+
+# Prisma
+prisma/*.db
+
+.paymob-config.json

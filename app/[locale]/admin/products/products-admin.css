@@ -1,0 +1,342 @@
+/* ══════════════════════════════════════
+   Admin Products — Professional UI
+   ══════════════════════════════════════ */
+
+/* Page Layout */
+.ap-page { }
+
+.ap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.ap-title { font-size: 1.5rem; font-weight: 800; }
+.ap-subtitle { color: var(--color-text-muted); font-size: 0.85rem; margin-top: 2px; }
+
+.ap-header-actions {
+  display: flex; gap: var(--space-sm); align-items: center;
+}
+
+.ap-header-actions .btn { display: flex; align-items: center; gap: 6px; }
+
+/* ── Toolbar ── */
+.ap-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--space-lg); gap: var(--space-md); flex-wrap: wrap;
+}
+
+.ap-filter-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+
+.ap-filter-tab {
+  padding: 7px 14px; border-radius: var(--radius-full);
+  font-size: 0.8rem; font-weight: 600; border: 1px solid var(--color-border);
+  background: transparent; color: var(--color-text-secondary);
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.ap-filter-tab:hover { border-color: var(--color-primary-light); color: var(--color-text); }
+.ap-filter-tab.active {
+  background: var(--color-primary); color: #fff; border-color: var(--color-primary);
+}
+
+.ap-search-box {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: var(--radius-full);
+  border: 1px solid var(--color-border); background: var(--color-surface);
+  min-width: 220px;
+}
+.ap-search-box svg { color: var(--color-text-muted); flex-shrink: 0; }
+.ap-search-box input {
+  border: none; background: none; color: var(--color-text);
+  font-size: 0.85rem; width: 100%; outline: none;
+}
+
+/* ── Table ── */
+.ap-table-wrap {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+
+.ap-table { width: 100%; border-collapse: collapse; }
+
+.ap-table thead { background: var(--color-bg-tertiary); }
+.ap-table th {
+  padding: 12px 16px; text-align: start; font-size: 0.72rem;
+  font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-muted); border-bottom: 1px solid var(--color-border);
+}
+.ap-th-check { width: 40px; text-align: center; }
+.ap-th-check input, .ap-table td input[type="checkbox"] {
+  width: 16px; height: 16px; accent-color: var(--color-primary); cursor: pointer;
+}
+
+.ap-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--color-border);
+  font-size: 0.88rem; vertical-align: middle;
+}
+
+.ap-table tr:last-child td { border-bottom: none; }
+.ap-table tr:hover { background: rgba(139,92,246,0.03); }
+.ap-table tr.selected { background: rgba(139,92,246,0.08); }
+
+/* Product Cell */
+.ap-product-cell { display: flex; align-items: center; gap: 12px; }
+
+.ap-product-thumb {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  overflow: hidden; flex-shrink: 0;
+  background: var(--color-bg-tertiary); display: flex;
+  align-items: center; justify-content: center;
+  border: 1px solid var(--color-border);
+}
+.ap-product-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.ap-product-emoji { font-size: 1.5rem; }
+
+.ap-product-name { font-weight: 600; font-size: 0.9rem; }
+.ap-product-name-ar { font-size: 0.75rem; color: var(--color-text-muted); }
+.ap-product-slug { font-size: 0.7rem; color: var(--color-text-muted); font-family: monospace; }
+
+/* Category Badge */
+.ap-cat-badge {
+  padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.72rem;
+  font-weight: 600; background: rgba(139,92,246,0.1); color: var(--color-primary);
+  border: 1px solid rgba(139,92,246,0.2);
+}
+
+/* Price */
+.ap-price-cell { display: flex; align-items: center; gap: 6px; }
+.ap-price { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.ap-compare-price {
+  font-size: 0.75rem; color: var(--color-text-muted);
+  text-decoration: line-through; font-family: monospace;
+}
+
+/* Stock */
+.ap-stock {
+  font-weight: 700; font-family: monospace; padding: 3px 10px;
+  border-radius: var(--radius-full); font-size: 0.8rem;
+}
+.ap-stock.ok { color: var(--color-success); background: rgba(16,185,129,0.1); }
+.ap-stock.low { color: var(--color-warning); background: rgba(245,158,11,0.1); }
+.ap-stock.out { color: var(--color-danger); background: rgba(239,68,68,0.1); }
+
+/* Status Badge */
+.ap-status-badge {
+  padding: 4px 10px; border-radius: var(--radius-full);
+  font-size: 0.72rem; font-weight: 700;
+}
+.ap-status-badge.active { color: var(--color-success); background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); }
+.ap-status-badge.inactive { color: var(--color-text-muted); background: var(--color-bg-tertiary); border: 1px solid var(--color-border); }
+
+/* Flags */
+.ap-flags { display: flex; gap: 4px; }
+.ap-flag {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-full); font-size: 0.75rem;
+  background: var(--color-bg-tertiary); border: 1px solid var(--color-border);
+}
+
+/* Actions */
+.ap-actions { display: flex; gap: 4px; }
+.ap-action-btn {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-md); border: 1px solid var(--color-border);
+  background: transparent; color: var(--color-text-secondary);
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.ap-action-btn:hover { background: var(--color-surface-hover); color: var(--color-text); border-color: var(--color-primary-light); }
+.ap-action-btn.danger:hover { background: rgba(239,68,68,0.1); color: var(--color-danger); border-color: rgba(239,68,68,0.3); }
+
+.ap-empty {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-sm); padding: var(--space-3xl);
+  color: var(--color-text-muted);
+}
+.ap-empty span { font-size: 2.5rem; opacity: 0.4; }
+
+/* ══════════════════════════════════════
+   Product Modal — Tabbed Professional
+   ══════════════════════════════════════ */
+.ap-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-lg);
+}
+
+.ap-modal {
+  background: var(--color-bg-secondary); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); width: 100%; max-width: 680px;
+  max-height: 85vh; display: flex; flex-direction: column;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3); animation: modalIn 200ms ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ap-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+.ap-modal-header h2 { font-size: 1.2rem; font-weight: 700; }
+.ap-modal-close {
+  width: 32px; height: 32px; border-radius: var(--radius-full);
+  background: var(--color-bg-tertiary); border: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-muted); cursor: pointer; font-size: 1rem;
+}
+.ap-modal-close:hover { background: var(--color-surface-hover); color: var(--color-text); }
+
+/* Modal Tabs */
+.ap-modal-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--space-xl);
+}
+.ap-modal-tab {
+  padding: 12px 16px; font-size: 0.82rem; font-weight: 600;
+  color: var(--color-text-muted); border: none; background: none;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast); white-space: nowrap;
+}
+.ap-modal-tab:hover { color: var(--color-text); }
+.ap-modal-tab.active {
+  color: var(--color-primary); border-bottom-color: var(--color-primary);
+}
+
+/* Modal Body */
+.ap-modal-body {
+  flex: 1; overflow-y: auto; padding: var(--space-xl);
+}
+
+.ap-tab-content {
+  display: flex; flex-direction: column; gap: var(--space-md);
+  animation: fadeIn 200ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.ap-form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);
+}
+
+/* Slug Input */
+.ap-slug-input {
+  display: flex; align-items: center;
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ap-slug-prefix {
+  padding: 10px 12px; background: var(--color-bg-tertiary);
+  color: var(--color-text-muted); font-size: 0.85rem; font-family: monospace;
+  border-inline-end: 1px solid var(--color-border); white-space: nowrap;
+}
+.ap-slug-input .form-input { border: none; border-radius: 0; }
+
+/* Price Input */
+.ap-price-input {
+  display: flex; align-items: center;
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ap-price-prefix {
+  padding: 10px 14px; background: var(--color-bg-tertiary);
+  color: var(--color-text-muted); font-weight: 700; font-size: 1rem;
+  border-inline-end: 1px solid var(--color-border);
+}
+.ap-price-input .form-input { border: none; border-radius: 0; font-family: monospace; font-weight: 700; }
+
+.ap-discount-badge {
+  display: inline-block; margin-top: 6px;
+  padding: 3px 10px; border-radius: var(--radius-full);
+  font-size: 0.75rem; font-weight: 700;
+  color: var(--color-success); background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.25);
+}
+
+.ap-pricing-note {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px; background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md); font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+/* Image Upload */
+.ap-image-upload { display: flex; flex-direction: column; gap: var(--space-md); }
+
+.ap-image-dropzone {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-sm);
+  padding: var(--space-2xl); border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg); cursor: pointer;
+  transition: all var(--transition-fast); text-align: center;
+}
+.ap-image-dropzone:hover {
+  border-color: var(--color-primary); background: rgba(139,92,246,0.03);
+}
+.ap-dropzone-icon { color: var(--color-text-muted); }
+.ap-dropzone-text { font-weight: 600; color: var(--color-text); }
+.ap-dropzone-hint { font-size: 0.8rem; color: var(--color-text-muted); }
+
+.ap-image-preview {
+  position: relative; border-radius: var(--radius-lg);
+  overflow: hidden; border: 1px solid var(--color-border);
+}
+.ap-image-preview img {
+  width: 100%; height: 240px; object-fit: cover; display: block;
+}
+.ap-image-actions {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: var(--space-sm); display: flex; gap: var(--space-xs);
+  justify-content: center;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+}
+
+.ap-upload-progress {
+  height: 4px; border-radius: 2px; background: var(--color-bg-tertiary);
+  overflow: hidden;
+}
+.ap-progress-bar {
+  height: 100%; width: 60%; background: var(--color-primary);
+  border-radius: 2px; animation: progressAnim 1.5s ease-in-out infinite;
+}
+@keyframes progressAnim {
+  0% { width: 10%; } 50% { width: 80%; } 100% { width: 10%; }
+}
+
+/* Toggle List */
+.ap-toggle-list { display: flex; flex-direction: column; gap: 2px; }
+
+.ap-toggle-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px; border-radius: var(--radius-md);
+  background: var(--color-bg-tertiary); gap: var(--space-md);
+}
+.ap-toggle-item + .ap-toggle-item { margin-top: 6px; }
+.ap-toggle-label { font-weight: 600; font-size: 0.9rem; }
+.ap-toggle-desc { font-size: 0.78rem; color: var(--color-text-muted); margin-top: 2px; }
+
+/* Modal Footer */
+.ap-modal-footer {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: var(--space-sm); padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+.ap-modal-footer .btn { display: flex; align-items: center; gap: 6px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .ap-header { flex-direction: column; align-items: flex-start; }
+  .ap-toolbar { flex-direction: column; }
+  .ap-form-grid { grid-template-columns: 1fr; }
+  .ap-modal { max-height: 95vh; margin: var(--space-sm); }
+  .ap-table { font-size: 0.8rem; }
+}

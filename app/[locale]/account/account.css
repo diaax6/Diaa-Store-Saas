@@ -1,0 +1,61 @@
+.account-sidebar {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-md); position: sticky; top: 90px;
+}
+.account-user-card {
+  display: flex; align-items: center; gap: var(--space-sm);
+  padding: var(--space-md); margin-bottom: var(--space-sm);
+  background: var(--color-bg-tertiary); border-radius: var(--radius-md);
+}
+.account-avatar {
+  width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; color: white; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+}
+.account-nav { display: flex; flex-direction: column; gap: 2px; }
+.account-link {
+  display: flex; align-items: center; gap: var(--space-sm); padding: 10px 12px;
+  border-radius: var(--radius-md); font-size: 0.88rem; font-weight: 500;
+  color: var(--color-text-secondary); transition: all var(--transition-fast);
+}
+.account-link:hover { background: var(--color-surface-hover); color: var(--color-text); }
+.account-link.active { background: rgba(139,92,246,0.1); color: var(--color-primary); font-weight: 600; }
+
+/* Account Pages Common */
+.account-page-title { font-size: 1.5rem; font-weight: 800; margin-bottom: var(--space-lg); }
+
+.sub-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-lg);
+  display: flex; align-items: center; gap: var(--space-md);
+  transition: all var(--transition-fast);
+}
+.sub-card:hover { border-color: var(--color-primary); }
+.sub-icon { font-size: 2rem; }
+.sub-info { flex: 1; }
+.sub-name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+.sub-meta { font-size: 0.8rem; color: var(--color-text-muted); display: flex; gap: var(--space-md); }
+
+.wallet-balance-card {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: var(--radius-lg); padding: var(--space-xl); color: white; text-align: center;
+}
+.wallet-amount { font-size: 3rem; font-weight: 800; }
+.wallet-label { font-size: 0.9rem; opacity: 0.8; }
+
+.transaction-item {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: 12px 0; border-bottom: 1px solid var(--color-border);
+}
+.transaction-item:last-child { border-bottom: none; }
+.tx-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border-radius: var(--radius-md); flex-shrink: 0; }
+.tx-info { flex: 1; }
+.tx-desc { font-weight: 600; font-size: 0.9rem; }
+.tx-date { font-size: 0.75rem; color: var(--color-text-muted); }
+.tx-amount { font-weight: 700; font-size: 0.95rem; }
+.tx-credit { color: var(--color-success); }
+.tx-debit { color: var(--color-danger); }
+
+@media (max-width: 768px) {
+  .account-sidebar { position: static; }
+}

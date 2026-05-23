@@ -1,0 +1,37 @@
+.integrations-list { display: flex; flex-direction: column; gap: var(--space-lg); }
+
+.integration-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.integration-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.integration-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; border-radius: var(--radius-md); flex-shrink: 0;
+}
+
+.integration-info { flex: 1; }
+.integration-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
+.integration-info p { font-size: 0.8rem; }
+
+.integration-fields { padding: var(--space-lg); }
+
+.input-with-btn {
+  display: flex; gap: var(--space-sm); align-items: flex-start;
+}
+.input-with-btn .form-input { flex: 1; }
+
+@media (max-width: 768px) {
+  .integration-header { flex-direction: column; align-items: flex-start; }
+}

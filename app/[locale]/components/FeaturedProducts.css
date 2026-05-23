@@ -1,0 +1,526 @@
+/* ══════════════════════════════════════════
+   Featured Products — Premium SparkZone Cards
+   ══════════════════════════════════════════ */
+
+.featured-section {
+  padding: var(--space-2xl) 0 var(--space-3xl);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  gap: var(--space-lg);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.section-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.view-all-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.view-all-link:hover { opacity: 0.8; }
+
+/* ── Product Grid — 4 columns ── */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+/* ── Spark Card ── */
+.spark-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.spark-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 32px rgba(230,126,34,0.15), 0 0 0 1px rgba(230,126,34,0.1);
+  transform: translateY(-4px);
+}
+
+/* Save Badge */
+.save-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  background: linear-gradient(135deg, #E53935, #C62828);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 6px rgba(229,57,53,0.25);
+}
+
+[dir="rtl"] .save-badge { left: auto; right: 10px; }
+
+/* Popular Badge */
+.popular-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(245,158,11,0.25);
+}
+
+[dir="rtl"] .popular-badge { right: auto; left: 10px; }
+
+/* Card Image */
+.spark-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  transition: all 300ms ease;
+  background: linear-gradient(180deg, rgba(139,92,246,0.03) 0%, transparent 100%);
+}
+
+.spark-card:hover .spark-card-image {
+  background: linear-gradient(180deg, rgba(139,92,246,0.06) 0%, transparent 100%);
+}
+
+.spark-card-emoji {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+  transition: transform 300ms ease;
+}
+
+.spark-card:hover .spark-card-emoji {
+  transform: scale(1.1);
+}
+
+/* Brand SVG Logo */
+.spark-card-brand {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 300ms ease, filter 300ms ease;
+}
+.spark-card-brand svg, .spark-card-brand .brand-svg {
+  width: 100%;
+  height: 100%;
+}
+.spark-card:hover .spark-card-brand {
+  transform: scale(1.12);
+  filter: drop-shadow(0 2px 12px rgba(139,92,246,0.2));
+}
+
+.spark-card-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.spark-card-brand-logo .brand-svg,
+.spark-card-brand-logo svg {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+  transition: transform 300ms ease;
+}
+
+.spark-card:hover .spark-card-brand-logo svg,
+.spark-card:hover .spark-card-brand-logo .brand-svg {
+  transform: scale(1.1);
+}
+
+/* Card Body */
+.spark-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Category label */
+.spark-card-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.spark-cat-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.spark-cat-name {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.spark-card-cat-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-primary);
+  background: rgba(139,92,246,0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+/* Title */
+.spark-card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.spark-card-title a {
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+.spark-card-title a:hover {
+  color: var(--color-primary);
+}
+
+/* Badges */
+.spark-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.spark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.62rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.spark-badge svg {
+  flex-shrink: 0;
+}
+
+.spark-badge-guest {
+  color: #E8A838;
+  border-color: rgba(232,168,56,0.25);
+  background: rgba(232,168,56,0.06);
+}
+
+.spark-badge-auto {
+  color: #22C55E;
+  border-color: rgba(34,197,94,0.25);
+  background: rgba(34,197,94,0.06);
+}
+
+.spark-badge-stock {
+  color: #3B82F6;
+  border-color: rgba(59,130,246,0.25);
+  background: rgba(59,130,246,0.06);
+}
+
+.spark-badge-low {
+  color: #F59E0B;
+  border-color: rgba(245,158,11,0.25);
+  background: rgba(245,158,11,0.06);
+}
+
+.spark-badge-out {
+  color: #EF4444;
+  border-color: rgba(239,68,68,0.25);
+  background: rgba(239,68,68,0.06);
+}
+
+/* Description */
+.spark-card-desc {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+/* Divider */
+.spark-card-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 4px 0 10px;
+}
+
+/* Footer — Price + Actions */
+.spark-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.spark-price-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.spark-price-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 1px;
+}
+
+.spark-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.spark-price-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  letter-spacing: 0.02em;
+}
+
+.spark-price-mo {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.spark-price-original {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.spark-price-currency {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+/* Also support the simple price classes from the old component */
+.spark-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.price-current {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.price-compare {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.price-period {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+/* Action Buttons */
+.spark-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.spark-btn-cart, .spark-btn-arrow {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 0.9rem;
+}
+
+.spark-btn-cart:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(230,126,34,0.3);
+}
+
+.spark-btn-cart.added {
+  background: #27AE60;
+  color: white;
+  border-color: #27AE60;
+  box-shadow: 0 4px 12px rgba(39,174,96,0.3);
+}
+
+.spark-btn-cart:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.spark-btn-arrow:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+  border-color: var(--color-border-light);
+}
+
+.spark-card-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   Testimonials Section
+   ══════════════════════════════════════ */
+.testimonials-section {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-2xl);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.testimonial-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all 300ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.testimonial-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(139,92,246,0.1);
+}
+
+.tc-stars {
+  color: #F59E0B;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.tc-text {
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  font-style: italic;
+  flex: 1;
+}
+
+.tc-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.tc-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.tc-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.tc-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.tc-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+  .featured-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .featured-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 520px) {
+  .featured-grid { grid-template-columns: 1fr; }
+  .spark-card-image { height: 100px; }
+}

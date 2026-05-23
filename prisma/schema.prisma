@@ -1,0 +1,271 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// PLATFORM ADMIN (Super Admin team)
+// ============================================================
+
+model PlatformAdmin {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("PLATFORM_ADMIN") // PLATFORM_SUPER_ADMIN, PLATFORM_ADMIN, PLATFORM_SUPPORT
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("platform_admins")
+}
+
+// ============================================================
+// TENANT OWNER (Store owners — your customers)
+// ============================================================
+
+model TenantOwner {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenants Tenant[]
+
+  @@map("tenant_owners")
+}
+
+// ============================================================
+// TENANT (Each store)
+// ============================================================
+
+model Tenant {
+  id            String    @id @default(cuid())
+  name          String
+  slug          String    @unique
+  subdomain     String    @unique
+  customDomain  String?   @unique
+  ownerId       String
+  status        String    @default("TRIAL") // TRIAL, ACTIVE, SUSPENDED, CANCELLED
+  dbName        String    @unique // database name for this tenant
+  
+  // Theme/Settings
+  logoUrl       String?
+  primaryColor  String    @default("#6366f1")
+  accentColor   String    @default("#8b5cf6")
+  description   String?
+  whatsappNumber String?
+  
+  trialEndsAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  owner         TenantOwner    @relation(fields: [ownerId], references: [id])
+  subscriptions Subscription[]
+  tenantAddOns  TenantAddOn[]
+  payments      Payment[]
+  domains       TenantDomain[]
+
+  @@map("tenants")
+}
+
+// ============================================================
+// TENANT DOMAINS
+// ============================================================
+
+model TenantDomain {
+  id         String   @id @default(cuid())
+  tenantId   String
+  domain     String   @unique
+  isVerified Boolean  @default(false)
+  isPrimary  Boolean  @default(false)
+  addedBy    String   @default("TENANT") // TENANT or PLATFORM_ADMIN
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_domains")
+}
+
+// ============================================================
+// PLANS (Dynamic — managed by Super Admin)
+// ============================================================
+
+model Plan {
+  id            String   @id @default(cuid())
+  name          String
+  nameAr        String?  // Arabic name
+  description   String?
+  price         Float
+  billingCycle  String   @default("MONTHLY") // MONTHLY, YEARLY, LIFETIME
+  
+  // Limits
+  maxProducts   Int      @default(20)
+  maxOrders     Int      @default(100) // per month, -1 = unlimited
+  maxStaff      Int      @default(2)
+  maxCategories Int      @default(5)
+  storageGB     Float    @default(1)
+  
+  // Features as JSON array of feature keys
+  features      String   @default("[]") // JSON: ["manual_delivery", "basic_stock"]
+  
+  isActive      Boolean  @default(true)
+  isDefault     Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+// ============================================================
+// PLATFORM FEATURES (Dynamic feature definitions)
+// ============================================================
+
+model PlatformFeature {
+  id          String   @id @default(cuid())
+  key         String   @unique // e.g. "auto_delivery", "telegram_bot"
+  name        String           // Display name
+  nameAr      String?          // Arabic name
+  description String?
+  category    String   @default("GENERAL") // GENERAL, DELIVERY, COMMUNICATION, ADVANCED
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("platform_features")
+}
+
+// ============================================================
+// SUBSCRIPTIONS
+// ============================================================
+
+model Subscription {
+  id          String    @id @default(cuid())
+  tenantId    String
+  planId      String
+  status      String    @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED, SUSPENDED
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+  autoRenew   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  @@map("subscriptions")
+}
+
+// ============================================================
+// ADD-ON SERVICES (Dynamic — managed by Super Admin)
+// ============================================================
+
+model AddOnService {
+  id             String   @id @default(cuid())
+  name           String
+  nameAr         String?
+  description    String?
+  price          Float
+  billingType    String   @default("MONTHLY") // ONE_TIME, MONTHLY, YEARLY
+  activationType String   @default("MANUAL")  // MANUAL, AUTO
+  featureKey     String?  // links to PlatformFeature.key if applicable
+  isActive       Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tenantAddOns TenantAddOn[]
+
+  @@map("addon_services")
+}
+
+// ============================================================
+// TENANT ADD-ONS
+// ============================================================
+
+model TenantAddOn {
+  id          String    @id @default(cuid())
+  tenantId    String
+  addOnId     String
+  status      String    @default("PENDING_PAYMENT") // PENDING_PAYMENT, ACTIVE, EXPIRED, CANCELLED
+  activatedAt DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  addOn  AddOnService @relation(fields: [addOnId], references: [id])
+
+  @@map("tenant_addons")
+}
+
+// ============================================================
+// PAYMENTS (Platform-level — for subscriptions and add-ons)
+// ============================================================
+
+model Payment {
+  id            String    @id @default(cuid())
+  tenantId      String
+  type          String    // SUBSCRIPTION, ADD_ON
+  referenceId   String?   // subscriptionId or addOnId
+  amount        Float
+  currency      String    @default("EGP")
+  status        String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  paymentMethod String?
+  proofUrl      String?
+  transactionRef String?
+  notes         String?
+  reviewedBy    String?
+  reviewedAt    DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// ============================================================
+// PLATFORM SETTINGS
+// ============================================================
+
+model PlatformSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("platform_settings")
+}
+
+// ============================================================
+// PLATFORM ACTIVITY LOG
+// ============================================================
+
+model PlatformLog {
+  id        String   @id @default(cuid())
+  adminId   String?
+  adminName String?
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  String?  // JSON
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@map("platform_logs")
+}

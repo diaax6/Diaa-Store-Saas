@@ -1,0 +1,307 @@
+/* ============================================
+   Hero Section — AR-Pay Inspired with Carousel
+   ============================================ */
+
+.hero-section {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 60px 0 40px;
+}
+
+.hero-bg-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  top: -100px;
+  right: 10%;
+  animation: heroGlowPulse 4s ease-in-out infinite alternate;
+}
+
+.hero-glow-2 {
+  width: 300px;
+  height: 300px;
+  top: auto;
+  bottom: -100px;
+  right: auto;
+  left: 5%;
+  animation-delay: 2s;
+}
+
+.hero-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+@keyframes heroGlowPulse {
+  0% { opacity: 0.08; transform: scale(1); }
+  100% { opacity: 0.18; transform: scale(1.2); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* Hero Text */
+.hero-text {
+  flex: 1;
+  max-width: 580px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.05);
+}
+
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: 16px;
+  animation: fadeIn 0.5s ease;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.hero-btn-primary {
+  color: #fff;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+}
+
+.hero-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 35px rgba(0,0,0,0.4);
+}
+
+.hero-btn-outline {
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid;
+}
+
+.hero-btn-outline:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+
+.hero-trust-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  flex-wrap: wrap;
+}
+
+.hero-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hero-trust-divider {
+  opacity: 0.3;
+}
+
+/* Floating Cards */
+.hero-floating-cards {
+  position: relative;
+  width: 340px;
+  height: 320px;
+  flex-shrink: 0;
+}
+
+.floating-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  animation: floatCard 6s ease-in-out infinite;
+  min-width: 220px;
+}
+
+.floating-card-1 { top: 20px; right: 0; animation-delay: 0s; }
+.floating-card-2 { top: 120px; left: 0; animation-delay: 1s; }
+.floating-card-3 { top: 220px; right: 30px; animation-delay: 2s; }
+
+[dir="rtl"] .floating-card-1 { right: auto; left: 0; }
+[dir="rtl"] .floating-card-2 { left: auto; right: 0; }
+[dir="rtl"] .floating-card-3 { right: auto; left: 30px; }
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.floating-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.floating-card-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.floating-card-price {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+/* Dots */
+.hero-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-dot.active {
+  width: 30px;
+  border-radius: 5px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero-section {
+    min-height: auto;
+    padding: 40px 0 50px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-floating-cards {
+    display: none;
+  }
+
+  .hero-trust-badges {
+    justify-content: center;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .hero-btn {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+}
