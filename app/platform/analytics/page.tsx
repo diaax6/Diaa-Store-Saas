@@ -11,7 +11,7 @@ export default async function AnalyticsPage() {
     platformPrisma.payment.findMany({ where: { status: 'APPROVED' } }),
   ])
 
-  const totalRevenue = approvedPayments.reduce((sum, p) => sum + p.amount, 0)
+  const totalRevenue = approvedPayments.reduce((sum: number, p) => sum + p.amount, 0)
 
   return (
     <div className="space-y-6 animate-fade-in">
