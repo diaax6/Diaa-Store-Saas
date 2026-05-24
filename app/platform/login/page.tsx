@@ -5,105 +5,140 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function PlatformLoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError('')
-
-    const result = await signIn('platform-admin', {
-      redirect: false,
-      email,
-      password,
-    })
-
-    if (result?.error) {
-      setError('بيانات الدخول غلط')
+    setLoading(true)
+    try {
+      const res = await signIn('credentials', { email, password, redirect: false })
+      if (res?.error) {
+        setError('بيانات الدخول غير صحيحة')
+      } else {
+        router.push('/platform')
+      }
+    } catch {
+      setError('حدث خطأ، حاول مرة أخرى')
+    } finally {
       setLoading(false)
-    } else {
-      router.push('/platform')
     }
   }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif', direction: 'rtl',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'radial-gradient(ellipse at top, rgba(99,102,241,0.08) 0%, transparent 60%), #080b14',
+      fontFamily: "'Cairo', 'Inter', sans-serif",
+      direction: 'rtl',
     }}>
       <div style={{
-        width: '100%', maxWidth: 420, padding: '2.5rem',
-        background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 24, backdropFilter: 'blur(12px)',
+        width: 400,
+        background: '#0f1322',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 20,
+        padding: 40,
+        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
       }}>
         {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{
-            width: 64, height: 64,
+            width: 56,
+            height: 56,
+            margin: '0 auto 16px',
+            borderRadius: 16,
             background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 28, margin: '0 auto 1rem',
             boxShadow: '0 0 30px rgba(99,102,241,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 24,
           }}>⚡</div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'white', margin: 0 }}>
-            Super Admin
-          </h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginTop: 4 }}>
-            لوحة تحكم المنصة
-          </p>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', margin: '0 0 4px 0' }}>Super Admin</h1>
+          <p style={{ color: '#64748b', fontSize: 13, margin: 0 }}>لوحة تحكم المنصة</p>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: '0.85rem', marginBottom: 6 }}>
-              البريد الإلكتروني
-            </label>
+          {error && (
+            <div style={{
+              background: 'rgba(239,68,68,0.1)',
+              border: '1px solid rgba(239,68,68,0.2)',
+              color: '#f87171',
+              padding: '10px 14px',
+              borderRadius: 10,
+              fontSize: 13,
+              marginBottom: 20,
+              textAlign: 'center',
+            }}>{error}</div>
+          )}
+
+          <div style={{ marginBottom: 18 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#94a3b8', marginBottom: 6 }}>البريد الإلكتروني</label>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              required
-              className="input-field"
               placeholder="admin@diaastore.com"
+              required
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                background: '#0a0e1a',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 10,
+                color: '#f8fafc',
+                fontSize: 14,
+                fontFamily: 'inherit',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: '0.85rem', marginBottom: 6 }}>
-              كلمة المرور
-            </label>
+          <div style={{ marginBottom: 24 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#94a3b8', marginBottom: 6 }}>كلمة المرور</label>
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              required
-              className="input-field"
               placeholder="••••••••"
+              required
+              style={{
+                width: '100%',
+                padding: '12px 14px',
+                background: '#0a0e1a',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 10,
+                color: '#f8fafc',
+                fontSize: 14,
+                fontFamily: 'inherit',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
             />
           </div>
 
-          {error && (
-            <div style={{
-              background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-              borderRadius: 12, padding: '0.75rem 1rem', marginBottom: '1rem',
-              color: '#f87171', fontSize: '0.85rem', textAlign: 'center',
-            }}>
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary"
-            style={{ width: '100%', padding: '0.85rem', fontSize: '1rem' }}
-          >
+          <button type="submit" disabled={loading} style={{
+            width: '100%',
+            padding: '13px',
+            background: loading ? '#374151' : 'linear-gradient(135deg, #f97316, #ea580c)',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 10,
+            fontSize: 15,
+            fontWeight: 700,
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontFamily: 'inherit',
+            boxShadow: loading ? 'none' : '0 4px 20px rgba(249,115,22,0.3)',
+            transition: 'all 0.2s',
+          }}>
             {loading ? '⏳ جاري الدخول...' : '🔐 تسجيل الدخول'}
           </button>
         </form>
