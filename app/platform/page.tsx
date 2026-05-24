@@ -1,172 +1,137 @@
 import { platformPrisma } from '@/src/lib/platform-prisma'
-import { Store, Users, CreditCard, TrendingUp, AlertTriangle, Clock } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
 export default async function PlatformDashboard() {
-  const [
-    totalTenants,
-    activeTenants,
-    trialTenants,
-    suspendedTenants,
-    totalPayments,
-    pendingPayments,
-    recentTenants,
-    recentPayments,
-  ] = await Promise.all([
-    platformPrisma.tenant.count(),
-    platformPrisma.tenant.count({ where: { status: 'ACTIVE' } }),
-    platformPrisma.tenant.count({ where: { status: 'TRIAL' } }),
-    platformPrisma.tenant.count({ where: { status: 'SUSPENDED' } }),
-    platformPrisma.payment.count({ where: { status: 'APPROVED' } }),
-    platformPrisma.payment.count({ where: { status: 'PENDING' } }),
-    platformPrisma.tenant.findMany({
-      take: 5, orderBy: { createdAt: 'desc' },
-      include: { owner: true, subscriptions: { include: { plan: true }, take: 1, orderBy: { createdAt: 'desc' } } },
-    }),
-    platformPrisma.payment.findMany({
-      take: 5, orderBy: { createdAt: 'desc' },
-      include: { tenant: true },
-    }),
-  ])
+  let stats = { tenants: 0, active: 0, trial: 0, pendingPayments: 0 }
+  let recentTenants: any[] = []
+  let recentPayments: any[] = []
 
-  const stats = [
-    { label: 'إجمالي المتاجر', value: totalTenants, icon: Store, color: 'brand' },
-    { label: 'متاجر نشطة', value: activeTenants, icon: TrendingUp, color: 'emerald' },
-    { label: 'فترة تجريبية', value: trialTenants, icon: Clock, color: 'amber' },
-    { label: 'مدفوعات معلقة', value: pendingPayments, icon: CreditCard, color: 'red' },
-  ]
-
-  const statusBadge = (status: string) => {
-    const map: Record<string, { class: string; label: string }> = {
-      ACTIVE:    { class: 'badge-green', label: 'نشط' },
-      TRIAL:     { class: 'badge-yellow', label: 'تجريبي' },
-      SUSPENDED: { class: 'badge-red', label: 'موقوف' },
-      CANCELLED: { class: 'badge-gray', label: 'ملغي' },
-      PENDING:   { class: 'badge-yellow', label: 'في الانتظار' },
-      APPROVED:  { class: 'badge-green', label: 'مقبول' },
-      REJECTED:  { class: 'badge-red', label: 'مرفوض' },
-    }
-    const b = map[status] || { class: 'badge-gray', label: status }
-    return <span className={b.class}>{b.label}</span>
-  }
-
-  const colorMap: Record<string, string> = {
-    brand: 'from-brand-500/20 to-brand-600/10 border-brand-500/20',
-    emerald: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/20',
-    amber: 'from-amber-400/20 to-amber-500/10 border-amber-400/20',
-    red: 'from-red-500/20 to-red-600/10 border-red-500/20',
-  }
-
-  const iconColorMap: Record<string, string> = {
-    brand: 'text-brand-400',
-    emerald: 'text-emerald-400',
-    amber: 'text-amber-400',
-    red: 'text-red-400',
-  }
+  try {
+    const [tenants, active, trial, pendingPayments, rt, rp] = await Promise.all([
+      platformPrisma.tenant.count(),
+      platformPrisma.tenant.count({ where: { status: 'ACTIVE' } }),
+      platformPrisma.tenant.count({ where: { status: 'TRIAL' } }),
+      platformPrisma.payment.count({ where: { status: 'PENDING' } }),
+      platformPrisma.tenant.findMany({ take: 5, orderBy: { createdAt: 'desc' }, include: { owner: true } }),
+      platformPrisma.payment.findMany({ take: 5, orderBy: { createdAt: 'desc' }, include: { tenant: true } }),
+    ])
+    stats = { tenants, active, trial, pendingPayments }
+    recentTenants = rt
+    recentPayments = rp
+  } catch (e) { /* DB not ready */ }
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="page-title">لوحة تحكم المنصة</h1>
-        <p className="text-dark-200 text-sm mt-1">مرحباً بك في لوحة Super Admin</p>
+    <div style={{ fontFamily: "'Cairo', 'Inter', sans-serif" }}>
+      {/* Header */}
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: '#f8fafc', margin: 0 }}>لوحة تحكم المنصة</h1>
+        <p style={{ color: '#94a3b8', fontSize: 14, marginTop: 4 }}>مرحباً بك في لوحة Super Admin — إدارة كاملة لجميع المتاجر</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map(stat => {
-          const Icon = stat.icon
-          return (
-            <div key={stat.label}
-              className={`stat-card bg-gradient-to-br ${colorMap[stat.color]} border`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <Icon className={`w-5 h-5 ${iconColorMap[stat.color]}`} />
-              </div>
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <div className="text-xs text-dark-200 mt-1">{stat.label}</div>
+      {/* Stats Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+        {[
+          { label: 'إجمالي المتاجر', value: stats.tenants, icon: '🏪', gradient: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.05))', border: 'rgba(99,102,241,0.25)', iconBg: 'rgba(99,102,241,0.2)' },
+          { label: 'متاجر نشطة', value: stats.active, icon: '📈', gradient: 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(52,211,153,0.05))', border: 'rgba(16,185,129,0.25)', iconBg: 'rgba(16,185,129,0.2)' },
+          { label: 'فترة تجريبية', value: stats.trial, icon: '⏳', gradient: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(251,191,36,0.05))', border: 'rgba(245,158,11,0.25)', iconBg: 'rgba(245,158,11,0.2)' },
+          { label: 'مدفوعات معلقة', value: stats.pendingPayments, icon: '💳', gradient: 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(248,113,113,0.05))', border: 'rgba(239,68,68,0.25)', iconBg: 'rgba(239,68,68,0.2)' },
+        ].map((s, i) => (
+          <div key={i} style={{
+            background: s.gradient,
+            border: `1px solid ${s.border}`,
+            borderRadius: 16,
+            padding: '24px 20px',
+          }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: s.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, marginBottom: 16 }}>
+              {s.icon}
             </div>
-          )
-        })}
+            <div style={{ fontSize: 32, fontWeight: 800, color: '#f8fafc', lineHeight: 1 }}>{s.value}</div>
+            <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 6 }}>{s.label}</div>
+          </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Two Column Section */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 32 }}>
         {/* Recent Tenants */}
-        <div className="card-base p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-white flex items-center gap-2">
-              <Store className="w-4 h-4 text-brand-400" /> أحدث المتاجر
-            </h2>
-            <Link href="/platform/tenants" className="text-xs text-brand-400 hover:text-brand-300">
-              عرض الكل ←
-            </Link>
+        <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ color: '#f8fafc', fontSize: 16, fontWeight: 700, margin: 0 }}>🏪 أحدث المتاجر</h3>
+            <Link href="/platform/tenants" style={{ color: '#818cf8', fontSize: 13, textDecoration: 'none' }}>عرض الكل ←</Link>
           </div>
-          <div className="space-y-3">
+          <div style={{ padding: 20 }}>
             {recentTenants.length === 0 ? (
-              <p className="text-dark-200 text-sm text-center py-8">لا توجد متاجر بعد</p>
-            ) : recentTenants.map(t => (
-              <Link key={t.id} href={`/platform/tenants/${t.id}`}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-white/3 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-brand-600/20 flex items-center justify-center text-sm font-bold text-brand-300">
-                    {t.name[0]}
-                  </div>
+              <div style={{ textAlign: 'center', padding: '32px 0', color: '#64748b' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>🏪</div>
+                <p style={{ margin: 0 }}>لا توجد متاجر بعد</p>
+                <Link href="/platform/tenants/new" style={{ color: '#818cf8', fontSize: 13, marginTop: 8, display: 'inline-block' }}>+ إنشاء أول متجر</Link>
+              </div>
+            ) : (
+              recentTenants.map(t => (
+                <div key={t.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                   <div>
-                    <div className="text-sm font-medium text-white">{t.name}</div>
-                    <div className="text-xs text-dark-200">{t.subdomain}.diaastore.com</div>
+                    <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 14 }}>{t.name}</div>
+                    <div style={{ color: '#64748b', fontSize: 12 }}>{t.owner?.email}</div>
                   </div>
+                  <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 20, background: t.status === 'ACTIVE' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)', color: t.status === 'ACTIVE' ? '#10b981' : '#f59e0b' }}>
+                    {t.status === 'ACTIVE' ? 'نشط' : t.status === 'TRIAL' ? 'تجريبي' : t.status}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  {statusBadge(t.status)}
-                </div>
-              </Link>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
         {/* Recent Payments */}
-        <div className="card-base p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-white flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-brand-400" /> أحدث المدفوعات
-            </h2>
-            <Link href="/platform/payments" className="text-xs text-brand-400 hover:text-brand-300">
-              عرض الكل ←
-            </Link>
+        <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ color: '#f8fafc', fontSize: 16, fontWeight: 700, margin: 0 }}>💳 أحدث المدفوعات</h3>
+            <Link href="/platform/payments" style={{ color: '#818cf8', fontSize: 13, textDecoration: 'none' }}>عرض الكل ←</Link>
           </div>
-          <div className="space-y-3">
+          <div style={{ padding: 20 }}>
             {recentPayments.length === 0 ? (
-              <p className="text-dark-200 text-sm text-center py-8">لا توجد مدفوعات بعد</p>
-            ) : recentPayments.map(p => (
-              <div key={p.id}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-white/3 transition-all"
-              >
-                <div>
-                  <div className="text-sm font-medium text-white">{p.tenant.name}</div>
-                  <div className="text-xs text-dark-200">{p.type} — {p.amount} ج.م</div>
-                </div>
-                {statusBadge(p.status)}
+              <div style={{ textAlign: 'center', padding: '32px 0', color: '#64748b' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>💳</div>
+                <p style={{ margin: 0 }}>لا توجد مدفوعات بعد</p>
               </div>
-            ))}
+            ) : (
+              recentPayments.map(p => (
+                <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <div>
+                    <div style={{ color: '#f8fafc', fontWeight: 600, fontSize: 14 }}>{p.tenant?.name || 'متجر'}</div>
+                    <div style={{ color: '#64748b', fontSize: 12 }}>{p.type}</div>
+                  </div>
+                  <div style={{ color: '#10b981', fontWeight: 700, fontSize: 14 }}>{p.amount} ج.م</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="card-base p-6">
-        <h2 className="font-bold text-white mb-4">⚡ إجراءات سريعة</h2>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/platform/tenants/new" className="btn-primary flex items-center gap-2">
-            <Store className="w-4 h-4" /> إنشاء متجر جديد
-          </Link>
-          <Link href="/platform/plans" className="btn-secondary flex items-center gap-2">
-            <CreditCard className="w-4 h-4" /> إدارة الخطط
-          </Link>
-          <Link href="/platform/payments" className="btn-secondary flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" /> مدفوعات معلقة ({pendingPayments})
-          </Link>
+      <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: 24 }}>
+        <h3 style={{ color: '#f8fafc', fontSize: 16, fontWeight: 700, margin: '0 0 16px 0' }}>⚡ إجراءات سريعة</h3>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {[
+            { href: '/platform/tenants/new', label: '+ إنشاء متجر جديد', bg: 'linear-gradient(135deg, #6366f1, #8b5cf6)' },
+            { href: '/platform/plans', label: '📦 إدارة الخطط', bg: 'linear-gradient(135deg, #f59e0b, #d97706)' },
+            { href: '/platform/payments', label: '💰 مراجعة المدفوعات', bg: 'linear-gradient(135deg, #10b981, #059669)' },
+            { href: '/platform/analytics', label: '📊 الإحصائيات', bg: 'linear-gradient(135deg, #ec4899, #be185d)' },
+          ].map((a, i) => (
+            <Link key={i} href={a.href} style={{
+              background: a.bg,
+              color: '#fff',
+              padding: '10px 20px',
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: 600,
+              textDecoration: 'none',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+            }}>{a.label}</Link>
+          ))}
         </div>
       </div>
     </div>
